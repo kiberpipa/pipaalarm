@@ -1,0 +1,7 @@
+$def with (form, mac)
+
+
+<h1>Register new device with mac $mac</h1>
+<form action="/register/$mac" method="post">
+$:form.render()
+</form>

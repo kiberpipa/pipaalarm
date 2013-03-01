@@ -1,0 +1,81 @@
+$def with (active_devices, monitored)
+
+$ monitored_macs = [device[1]["mac"] for device in monitored]
+$ active_macs = [device.mac for device in active_devices]
+  
+<div class="container-fluid">
+<div class="row-fluid" align="center">
+  <div class="span12">
+    <h1>PingAlarm
+      <button style="padding-left: 10px" class="btn btn-success">Enable</button>
+    </h1> 
+    
+    <div class="row-fluid main">
+
+      <div class="span8 left-bar">
+        <table class="table table-bordered table-hover">
+          <caption><h2>Active devices</h2></caption>
+
+          <thead>
+            <tr>
+              <th>Mac</th><th>Ip</th><th>Monitored</th><th>Register</th>
+            </th>
+          </thead>
+
+          <tbody>
+
+            $for device in active_devices:
+              $if device.mac in monitored_macs:
+                <tr class="success">
+              $else:
+                <tr>
+
+              <td>$device.mac</td>
+              <td>$device.ip</td>
+
+              $ name = [client[0] for client in monitored if client[1]["mac"] == device.mac]
+
+              $if device.mac in monitored_macs:
+                <td>$name[0]</td>
+              $else:
+                <td>-</td> 
+
+              $if not device.mac in monitored_macs:
+                <td><a href="/register/$device.mac">Register</a></td>
+              $else:
+                <td><a href="/unregister/$name[0]">Unregister</a></td>
+              </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+    <div class="span4 right-bar">
+      <table class="table table-bordered table-hover">
+        <caption><h2>Offline devices</h2></caption>
+
+        <thead>
+          <tr>
+            <th>Mac</th><th>Monitored</th><th>Register</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        $for node in [node for node in monitored if node[1]["mac"] not in active_macs]:
+          $ mac = node[1]["mac"]
+          $ name = node[0]
+
+          <tr>
+            <td>$mac</td>
+            <td>$name</td>
+            <td><a href="/unregister/$name">Unregister</a></td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+</div>

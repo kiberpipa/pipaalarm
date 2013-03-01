@@ -1,0 +1,11 @@
+# virtualenv
+bin
+build
+include
+lib
+local
+
+# python
+*.egg-info
+*.egg
+*.pyc
